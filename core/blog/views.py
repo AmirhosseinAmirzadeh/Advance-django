@@ -2,7 +2,7 @@ from typing import Any
 from django.db.models.query import QuerySet
 from django.shortcuts import render, get_object_or_404
 from django.views.generic.base import TemplateView, RedirectView
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from blog.models import Post
 
 # Create your views here.
@@ -46,4 +46,14 @@ class PostListView(ListView):
     def get_queryset(self):
         posts = Post.objects.filter(status=True)
         return posts
-    
+
+
+class PostDetailView(DetailView):
+    """
+    A class for post detail view
+    """
+    model = Post
+    context_object_name = 'post'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
