@@ -1,8 +1,7 @@
 from typing import Any
-from django.shortcuts import render
-from django.views.generic.base import TemplateView
+from django.shortcuts import render, get_object_or_404
+from django.views.generic.base import TemplateView, RedirectView
 from blog.models import Post
-
 
 # Create your views here.
 def indexView(request):
@@ -25,3 +24,10 @@ class IndexView(TemplateView):
         context["name"] = "Ali"
         context["posts"] = Post.objects.all()
         return context
+    
+
+class RedirectToBing(RedirectView):
+    """
+    A class based view for redirect
+    """
+    url = 'https://www.bing.com'
