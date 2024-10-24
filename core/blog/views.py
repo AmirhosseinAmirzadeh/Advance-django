@@ -1,6 +1,8 @@
 from typing import Any
+from django.db.models.query import QuerySet
 from django.shortcuts import render, get_object_or_404
 from django.views.generic.base import TemplateView, RedirectView
+from django.views.generic import ListView
 from blog.models import Post
 
 # Create your views here.
@@ -31,3 +33,15 @@ class RedirectToBing(RedirectView):
     A class based view for redirect
     """
     url = 'https://www.bing.com'
+    
+
+class PostListView(ListView):
+    """
+    A class based view for post list view
+    """
+    model = Post
+    context_object_name = 'posts'
+    def get_queryset(self):
+        posts = Post.objects.filter(status=True)
+        return posts
+    
