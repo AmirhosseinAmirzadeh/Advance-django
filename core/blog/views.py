@@ -41,6 +41,7 @@ class PostListView(ListView):
     """
     model = Post
     paginate_by = 3
+    ordering = 'id'
     context_object_name = 'posts'
     def get_queryset(self):
         posts = Post.objects.filter(status=True)
