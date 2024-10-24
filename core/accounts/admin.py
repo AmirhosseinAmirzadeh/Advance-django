@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User
+from .models import User, Profile
+
 
 class CustomUserAdmin(UserAdmin):
     """ custom admin panel for user management with add and change forms plus password """
@@ -56,3 +57,4 @@ class CustomUserAdmin(UserAdmin):
     )
 
 admin.site.register(User,CustomUserAdmin)
+admin.site.register(Profile)
