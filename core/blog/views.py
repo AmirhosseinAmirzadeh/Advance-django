@@ -40,6 +40,7 @@ class PostListView(ListView):
     A class based view for post list view
     """
     model = Post
+    paginate_by = 3
     context_object_name = 'posts'
     def get_queryset(self):
         posts = Post.objects.filter(status=True)
