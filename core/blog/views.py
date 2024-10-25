@@ -2,8 +2,9 @@ from typing import Any
 from django.db.models.query import QuerySet
 from django.shortcuts import render, get_object_or_404
 from django.views.generic.base import TemplateView, RedirectView
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 from blog.models import Post
+from blog.forms import PostForm
 
 # Create your views here.
 def indexView(request):
@@ -57,3 +58,12 @@ class PostDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+    
+
+class PostCreateView(CreateView):
+    """
+    A class for post create view
+    """
+    model = Post
+    fields = '__all__'
+    success_url = '/blog/post/'
