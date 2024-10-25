@@ -2,7 +2,7 @@ from typing import Any
 from django.db.models.query import QuerySet
 from django.shortcuts import render, get_object_or_404
 from django.views.generic.base import TemplateView, RedirectView
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from blog.models import Post
 from blog.forms import PostForm
 
@@ -76,4 +76,11 @@ class PostEditView(UpdateView):
     model = Post
     fields  = '__all__'
     success_url = '/blog/post/'
-    
+
+
+class PostDeleteView(DeleteView):
+    """
+    A class for post delete view
+    """
+    model = Post
+    success_url = '/blog/post/'
