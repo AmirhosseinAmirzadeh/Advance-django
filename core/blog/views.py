@@ -6,6 +6,11 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from blog.models import Post
 from blog.forms import PostForm
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+# Django rest_framework
+from rest_framework.decorators import api_view
+from django.http import HttpResponse
+from rest_framework.response import Response
+
 
 # Create your views here.
 def indexView(request):
@@ -86,3 +91,8 @@ class PostDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     """
     model = Post
     success_url = '/blog/post/'
+
+
+@api_view()
+def api_post_list_view(request):
+    return Response("Hello AmirHossein")

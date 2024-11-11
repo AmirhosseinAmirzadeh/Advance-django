@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from .views import indexView
 from django.views.generic import TemplateView
 from blog import views
@@ -13,9 +13,11 @@ urlpatterns = [
     path('go-to-microsoft/', RedirectView.as_view(url='https://www.microsoft.com/'), name='redirect-to-microsoft'),
     path('go-to-bing/', views.RedirectToBing.as_view(), name='redirect-to-bing'),
     path('go-to-index/', RedirectView.as_view(pattern_name='blog:cbv-index'), name='redirect-to-index'),
-    path('post/', views.PostListView.as_view(), name='post-list'),
+    # path('post/', views.PostListView.as_view(), name='post-list'),
     path('post/<int:pk>/', views.PostDetailView.as_view(), name='post-detail'),
     path('post/create/', views.PostCreateView.as_view(), name='post-create'),
     path('post/<int:pk>/edit/', views.PostEditView.as_view(), name='post-edit'),
     path('post/<int:pk>/delete/', views.PostDeleteView.as_view(), name='post-delete'),
+    path('post/', views.api_post_list_view, name='api-post-list'),
+    path()
 ]
