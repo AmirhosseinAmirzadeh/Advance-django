@@ -5,6 +5,7 @@ from django.views.generic.base import TemplateView, RedirectView
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from blog.models import Post
 from blog.forms import PostForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 # Create your views here.
 def indexView(request):
@@ -36,7 +37,7 @@ class RedirectToBing(RedirectView):
     url = 'https://www.bing.com'
     
 
-class PostListView(ListView):
+class PostListView(LoginRequiredMixin, ListView):
     """
     A class based view for post list view
     """
@@ -49,7 +50,7 @@ class PostListView(ListView):
         return posts
 
 
-class PostDetailView(DetailView):
+class PostDetailView(LoginRequiredMixin, DetailView):
     """
     A class for post detail view
     """
@@ -60,7 +61,7 @@ class PostDetailView(DetailView):
         return context
     
 
-class PostCreateView(CreateView):
+class PostCreateView(LoginRequiredMixin, CreateView):
     """
     A class for post create view
     """
@@ -69,7 +70,7 @@ class PostCreateView(CreateView):
     success_url = '/blog/post/'
     
     
-class PostEditView(UpdateView):
+class PostEditView(LoginRequiredMixin, UpdateView):
     """
     A class for post edit view
     """
@@ -78,7 +79,7 @@ class PostEditView(UpdateView):
     success_url = '/blog/post/'
 
 
-class PostDeleteView(DeleteView):
+class PostDeleteView(LoginRequiredMixin, DeleteView):
     """
     A class for post delete view
     """
