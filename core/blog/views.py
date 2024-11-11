@@ -5,7 +5,7 @@ from django.views.generic.base import TemplateView, RedirectView
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from blog.models import Post
 from blog.forms import PostForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 # Create your views here.
 def indexView(request):
@@ -45,12 +45,13 @@ class PostListView(LoginRequiredMixin, ListView):
     paginate_by = 3
     ordering = 'id'
     context_object_name = 'posts'
+    permission_required = 'blog.view_post'
     def get_queryset(self):
         posts = Post.objects.filter(status=True)
         return posts
 
 
-class PostDetailView(LoginRequiredMixin, DetailView):
+class PostDetailView(PermissionRequiredMixin, LoginRequiredMixin, DetailView):
     """
     A class for post detail view
     """
@@ -61,7 +62,7 @@ class PostDetailView(LoginRequiredMixin, DetailView):
         return context
     
 
-class PostCreateView(LoginRequiredMixin, CreateView):
+class PostCreateView(PermissionRequiredMixin, LoginRequiredMixin, CreateView):
     """
     A class for post create view
     """
@@ -70,7 +71,7 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     success_url = '/blog/post/'
     
     
-class PostEditView(LoginRequiredMixin, UpdateView):
+class PostEditView(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     """
     A class for post edit view
     """
@@ -79,7 +80,7 @@ class PostEditView(LoginRequiredMixin, UpdateView):
     success_url = '/blog/post/'
 
 
-class PostDeleteView(LoginRequiredMixin, DeleteView):
+class PostDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     """
     A class for post delete view
     """
