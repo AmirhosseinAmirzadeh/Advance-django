@@ -93,6 +93,3 @@ class PostDeleteView(PermissionRequiredMixin, LoginRequiredMixin, DeleteView):
     success_url = '/blog/post/'
 
 
-@api_view()
-def api_post_list_view(request):
-    return Response("Hello AmirHossein")
