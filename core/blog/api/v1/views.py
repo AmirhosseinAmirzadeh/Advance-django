@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from .serializer import PostSerializer
 from ...models import Post
 from django.shortcuts import get_object_or_404
+from rest_framework import status
 
 
 @api_view(["GET", "POST"])
@@ -18,7 +19,7 @@ def postList(request):
         return Response(request.data)
 
 
-@api_view(["GET", "PUT"])
+@api_view(["GET", "PUT", "DELETE"])
 def postDetail(request, id):
     post = get_object_or_404(Post, pk=id, status=True)
     if request.method == "GET":
@@ -29,3 +30,7 @@ def postDetail(request, id):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+    elif request.method == "DELETE":
+        post.delete()
+        return Response({"detail":"✅ Item removed successfully"}, status=status.HTTP_204_NO_CONTENT)
+    
