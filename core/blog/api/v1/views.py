@@ -39,16 +39,18 @@ def postDetail(request, id):
 
 class PostList(APIView):
     """getting a list of posts and creating new posts"""
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = PostSerializer
     
     def get(self, request):
         """retrieving a list of posts"""
         posts = Post.objects.filter(status=True)
-        serializer = PostSerializer(posts, many=True)
+        serializer = self.serializer_class(posts, many=True)
         return Response(serializer.data)
     
     def post(self, request):
         """creating a post with provided data"""
-        serializer = PostSerializer(data=request.data)
+        serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
