@@ -5,7 +5,7 @@ from .serializer import PostSerializer
 from ...models import Post
 from django.shortcuts import get_object_or_404
 from rest_framework import status
-
+from rest_framework.views import APIView
 
 @api_view(["GET", "POST"])
 def postList(request):
@@ -35,4 +35,20 @@ def postDetail(request, id):
     elif request.method == "DELETE":
         post.delete()
         return Response({"detail":"✅ Item removed successfully"}, status=status.HTTP_204_NO_CONTENT)
+
+
+class PostList(APIView):
+    """getting a list of posts and creating new posts"""
     
+    def get(self, request):
+        """retrieving a list of posts"""
+        posts = Post.objects.filter(status=True)
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        """creating a post with provided data"""
+        serializer = PostSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
