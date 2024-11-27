@@ -54,3 +54,29 @@ class PostList(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data)
+    
+class PostDetail(APIView):
+    """ getting detail of the post and edit plus removing it """
+
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = PostSerializer
+
+    def get(self,request,id):
+        """ retrieving post detail """
+        post = get_object_or_404(Post, pk=id, status=True)
+        serializer = self.serializer_class(post)
+        return Response(serializer.data)
+    
+    def put(self,request,id):
+        """ edit post detail """
+        post = get_object_or_404(Post, pk=id, status=True)
+        serializer = self.serializer_class(post, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+    
+    def delete(self,request,id):
+        """ delete post detail """
+        post = get_object_or_404(Post, pk=id, status=True)
+        post.delete()
+        return Response({"detail":"✅ Item removed successfully"}, status=status.HTTP_204_NO_CONTENT)
