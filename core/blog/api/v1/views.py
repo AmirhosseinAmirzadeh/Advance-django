@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from .serializer import PostSerializer
 from ...models import Post
 from django.shortcuts import get_object_or_404
-from rest_framework import status
+from rest_framework import status, mixins
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView
 
@@ -84,14 +84,16 @@ class PostDetail(APIView):
         return Response({"detail":"✅ Item removed successfully"}, status=status.HTTP_204_NO_CONTENT)
 
 
-class PostList(GenericAPIView):
+class PostList(GenericAPIView, mixins.ListModelMixin, mixins.CreateModelMixin):
     """getting a list of posts and creating new posts"""
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = PostSerializer
     queryset = Post.objects.filter(status=True)
     
-    def get(self,request):
+    def get(self, request, *args, **kwargs):
         """ retrieving a list of posts """
-        queryset = self.get_queryset()
-        serializer = self.serializer_class(queryset, many=True)
-        return Response(serializer.data)
+        return self.list(request, *args, **kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        """ create post """
+        return self.create(request, *args, **kwargs)
