@@ -6,7 +6,7 @@ from ...models import Post
 from django.shortcuts import get_object_or_404
 from rest_framework import status, mixins
 from rest_framework.views import APIView
-from rest_framework.generics import GenericAPIView, ListAPIView
+from rest_framework.generics import GenericAPIView, ListAPIView, ListCreateAPIView
 
 
 @api_view(["GET", "POST"])
@@ -99,7 +99,14 @@ class PostDetail(APIView):
 #         return self.create(request, *args, **kwargs)
 
 
-class PostList(ListAPIView):
+# class PostList(ListAPIView):
+#     """getting a list of posts and creating new posts"""
+#     permission_classes = [IsAuthenticatedOrReadOnly]
+#     serializer_class = PostSerializer
+#     queryset = Post.objects.filter(status=True)
+
+
+class PostList(ListCreateAPIView):
     """getting a list of posts and creating new posts"""
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = PostSerializer
