@@ -113,13 +113,33 @@ class PostList(ListCreateAPIView):
     queryset = Post.objects.filter(status=True)
 
     
-class PostDetail(GenericAPIView):
+# class PostDetail(GenericAPIView):
+#     """ getting detail of the post and edit plus removing it """
+#     permission_classes = [IsAuthenticatedOrReadOnly]
+#     serializer_class = PostSerializer
+    
+#     def get(self, request, id):
+#         """ retrieving post detail """
+#         post = get_object_or_404(Post, pk=id, status=True)
+#         serializer = self.serializer_class(post)
+#         return Response(serializer.data)
+
+
+class PostDetail(GenericAPIView, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin):
     """ getting detail of the post and edit plus removing it """
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = PostSerializer
+    queryset = Post.objects.filter(status=True)
     
-    def get(self, request, id):
+    def get(self, request, *args, **kwargs):
         """ retrieving post detail """
-        post = get_object_or_404(Post, pk=id, status=True)
-        serializer = self.serializer_class(post)
-        return Response(serializer.data)
+        return self.retrieve(request, *args, **kwargs)
+    
+    def put(self, request, *args, **kwargs):
+        """ update post detail """
+        return self.update(request, *args, **kwargs)
+    
+    def delete(self, request, *args, **kwargs):
+        """ delete post detail """
+        return self.destroy(request, *args, **kwargs)
+    
