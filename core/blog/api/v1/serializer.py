@@ -7,9 +7,12 @@ class PostSerializer(serializers.Serializer):
     
     
 class PostSerializer(serializers.ModelSerializer):
+    
+    snippet = serializers.ReadOnlyField(source='get_snippet')
+
     class Meta:
         model = Post
-        fields = ['id', 'author', 'title', 'content', 'status', 'created_date', 'published_date']
+        fields = ['id', 'author', 'title', 'content', 'snippet', 'status', 'created_date', 'published_date']
         read_only_fields = ['author']
         
 
