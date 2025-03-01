@@ -8,6 +8,7 @@ from rest_framework import status, mixins
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView, ListAPIView, ListCreateAPIView, RetrieveAPIView, RetrieveUpdateAPIView, RetrieveDestroyAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework import viewsets
+from rest_framework.decorators import action
 
 @api_view(["GET", "POST"])
 def postList(request):
@@ -206,6 +207,10 @@ class PostModelViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = PostSerializer
     queryset = Post.objects.filter(status=True)
+
+    @action(methods=['get'], detail=False)
+    def get_ok(self, request):
+        return Response({'detail':'Ok'})
 
 class CategoryModelViewSet(viewsets.ModelViewSet):
     """ getting category of the posts """
