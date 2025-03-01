@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status, mixins
 from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView, ListAPIView, ListCreateAPIView, RetrieveAPIView, RetrieveUpdateAPIView, RetrieveDestroyAPIView, RetrieveUpdateDestroyAPIView
-
+from rest_framework import viewsets
 
 @api_view(["GET", "POST"])
 def postList(request):
@@ -149,3 +149,53 @@ class PostDetail(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = PostSerializer
     queryset = Post.objects.filter(status=True)
+
+
+class PostViewSet(viewsets.ViewSet):
+    """ getting list and detail of the posts by using ViewSet """
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = PostSerializer
+    queryset = Post.objects.filter(status=True)
+
+    def list(self, request):
+        """ getting list of the posts """
+        serializer = self.serializer_class(self.queryset, many=True)
+        return Response(serializer.data)
+
+    def retrieve(self, request, pk=None):
+        """ getting detail of the post """
+        post = get_object_or_404(self.queryset, pk=pk)
+        serializer = self.serializer_class(post)
+        return Response(serializer.data)
+
+    def create(self, request):
+        """ create a new post """
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+
+    def update(self, request, pk=None):
+        """ update a post """
+        post = get_object_or_404(Post, pk=pk)
+        serializer = self.serializer_class(post, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+        
+    def partial_update(self, request, pk=None):
+        """ partial update a post """
+        post = get_object_or_404(Post, pk=pk)
+        serializer = self.serializer_class(post, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+        
+    def destroy(self, request, pk=None):
+        """ delete a post """
+        post = get_object_or_404(Post, pk=pk)
+        post.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
