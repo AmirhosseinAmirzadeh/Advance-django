@@ -1,8 +1,8 @@
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
-from .serializer import PostSerializer
-from ...models import Post
+from .serializer import PostSerializer, CategorySerializer
+from ...models import Post, Category
 from django.shortcuts import get_object_or_404
 from rest_framework import status, mixins
 from rest_framework.views import APIView
@@ -144,7 +144,7 @@ class PostList(ListCreateAPIView):
 #         return self.destroy(request, *args, **kwargs)
     
 
-class PostDetail(RetrieveUpdateDestroyAPIView):
+'''class PostDetail(RetrieveUpdateDestroyAPIView):
     """ getting detail of the post and edit plus removing it """
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = PostSerializer
@@ -198,4 +198,17 @@ class PostViewSet(viewsets.ViewSet):
         """ delete a post """
         post = get_object_or_404(Post, pk=pk)
         post.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(status=status.HTTP_204_NO_CONTENT)'''
+    
+
+class PostModelViewSet(viewsets.ModelViewSet):
+    """ getting list and detail of the posts by using ViewSet """
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = PostSerializer
+    queryset = Post.objects.filter(status=True)
+
+class CategoryModelViewSet(viewsets.ModelViewSet):
+    """ getting category of the posts """
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
