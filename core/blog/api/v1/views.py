@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.generics import GenericAPIView, ListAPIView, ListCreateAPIView, RetrieveAPIView, RetrieveUpdateAPIView, RetrieveDestroyAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from .permissions import IsOwnerOrReadOnly
 
 @api_view(["GET", "POST"])
 def postList(request):
@@ -204,7 +205,7 @@ class PostViewSet(viewsets.ViewSet):
 
 class PostModelViewSet(viewsets.ModelViewSet):
     """ getting list and detail of the posts by using ViewSet """
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
     serializer_class = PostSerializer
     queryset = Post.objects.filter(status=True)
 
